@@ -45,8 +45,14 @@ class Pos extends Component
 
             if (!empty($this->item)) {
                 $this->item->quantity = 1;
-                array_push($this->items, $this->item);
+                $this->items[] = $this->item;
+
                 collect($this->items);
+
+                if(count($this->items) >1){
+
+                    dd($this->items);
+                }
                 
                 
                $this->showSuccess();
