@@ -23,6 +23,8 @@
        
         {{ $slot }}
      
+        <x-dialog z-index="z-50" blur="md" align="center" />
         @livewireScripts
+
     </body>
 </html>

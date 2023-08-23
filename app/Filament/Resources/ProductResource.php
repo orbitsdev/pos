@@ -78,12 +78,13 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image') ->url(fn ($record): string => Storage::disk('public')->url($record->image))
-                ->openUrlInNewTab(),
+            ImageColumn::make('image') ->url(fn ($record): string => $record->image ?  Storage::disk('public')->url($record->image) : asset('/assets/images/placeholder.jpg') )
+                ->openUrlInNewTab()->defaultImageUrl(url('/assets/images/placeholder.jpg')),
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('price')->sortable(),
                 TextColumn::make('id_number')->searchable(),
                 TextColumn::make('bar_code')->searchable(),
+                TextColumn::make('created_at')->date('d-m-Y D h:i A')->sortable()->searchable(),
             ])
             ->filters([
                 //

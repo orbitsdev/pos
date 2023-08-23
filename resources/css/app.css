@@ -13,7 +13,7 @@
 
 .pos-container {
     display: grid;
-    gap: 0px 20px;
+    gap: 0px 0px;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(24, minmax(0px, auto));
 }
@@ -30,7 +30,7 @@
 
 .pos-container .item3 {
     grid-column: 1/10;
-    grid-row: 2/20;
+    grid-row: 2/25;
     display: flex; /* Add display flex */
     flex-direction: column; /* Flex direction column */
 }
@@ -53,12 +53,12 @@
  */
  @media screen and (min-height: 600px) {
     .pos-container .item3 .t-container{
-        height: 300px !important;
+        height: 330px !important;
     }
 }
- @media screen and (min-height: 700px) {
+ @media screen and (min-height: 800px) {
     .pos-container .item3 .t-container{
        
-        height: 350px !important;
+        height: 500px !important;
     }
 }

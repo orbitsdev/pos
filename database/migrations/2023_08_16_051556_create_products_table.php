@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->unique()->nullable();
+            $table->string('image')->nullable();
             $table->string('name')->unique()->nullable();
             $table->bigInteger('id_number')->unique()->nullable();
             $table->string('bar_code')->unique()->nullable(); 
-            $table->decimal('price', 10, 2)->nullable();
+            $table->integer('price')->nullable();
             $table->timestamps();
         });
     }
