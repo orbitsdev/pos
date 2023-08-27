@@ -1,10 +1,10 @@
-<x-modal.card max-width="5xl" title="Add Item Manually" align="center" blur wire:model="showForm">
+<x-modal.card max-width="5xl" title="Add Item Manually" align="center" blur wire:model="showAddForm">
     <div class="grid grid-cols-1  gap-4">
         <div>
             @if(empty($selectedItemDetails))
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Search for a Product:</label>
-                <x-input wire:model="addSearch" placeholder="Enter Product Name or ID" />
+                <x-input icon="search" wire:model="addSearch" placeholder="Enter Product Name or ID" />
             </div>
         @else
         <div class="mb-4 flex items-center justify-center transition-opacity duration-300">
@@ -36,7 +36,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
-                        @forelse($addSearchResult as $item)
+                        @forelse($products as $item)
 
                         
                         <tr>
@@ -77,7 +77,7 @@
             <div class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
                 
                 <div class="flex items-center space-x-4">
-                    <div class="grid grid-cols-2">
+                    <div class="grid grid-cols-3">
                         <div>
                             <p class="text-lg font-semibold">Price</p>
                             <p class="text-gray-600">₱ {{ $selectedItemDetails->price }}</p>
@@ -99,6 +99,30 @@
                                 </div>
                             </div>
                         </div>
+                        @if($transaction->itemTransactions->contains('product_id', $selectedItem))
+                        <div class="bg-blue-100 p-4 rounded-md flex items-start space-x-2">
+                            <div>
+
+                                {{-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-blue-600">
+                                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                                  </svg> --}}
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                                  </svg>
+                                  
+                                  
+                            </div>
+                            <p class="text-sm text-blue-700 leading-4">
+                                Item already in cart. Adding its quantity here will update the record. Consider using 'Update' instead of adding to avoid confusion.
+                            </p>
+                            
+                            </div>
+                            @else
+                            <div></div>
+                            @endif
+
+                        
+                        
 
                     </div>
                    
@@ -119,7 +143,11 @@
  
             <div class="flex">
                 <x-button flat label="Cancel" x-on:click="close" />
-                <x-button primary label="Confirm" wire:click="addItem" />
+                @if(!empty($itemQuantity) && $itemQuantity > 0)
+                <x-button primary label="Confirm" wire:click="confirmAddItem" />
+                @else
+                <x-button disabled label="Confirm"  />
+                @endif
             </div>
         </div>
     </x-slot>

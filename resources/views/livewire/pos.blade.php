@@ -70,9 +70,16 @@
                 <div class="w-full grid grid-cols-3 gap-1">
 
                     <button
+                    @if(!$transaction)
+                        disabled
+                        class="w-full py-3.5 px-1 cursor-not-allowed bg-[#237357] flex items-center justify-center transition-all hover:bg-[#1A4F41] text-white leading-5"
+                    @else
                         wire:click="showAddItemForm"
-                        class="w-full py-3.5 px-1 bg-[#237357] flex   items-center justify-center transition-all hover:  text-white leading-5  ">
-                        Add Item </button>
+                        class="w-full py-3.5 px-1 bg-[#237357] flex items-center justify-center transition-all hover:bg-[#1A4F41] text-white leading-5"
+                    @endif>
+                    Add Item
+                </button>
+                
                     <button
                         class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 4 </button>
@@ -86,13 +93,22 @@
                     <button
                         class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 7</button>
+                        <button
+                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex items-center justify-center transition-all leading-5">
+                        Remove Item
+                    </button>
+                    
                     <button
-                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex   items-center justify-center transition-all    leading-5  ">
-                        Remove Item </button>
-                    <button
-                        wire:click="clearBarCode"
-                        class="w-full py-3.5 px-1 bg-[#CF821D] flex   items-center justify-center transition-all   text-white leading-5 ">
-                        Clear Bar Code </button>
+                    @if($transaction)
+                        disabled
+                    @else
+                        wire:click="showTransactionRecordModal"
+                    @endif
+                    class="w-full py-3.5 px-1 bg-[#BD7574] @if($transaction) cursor-not-allowed hover:bg-[#9A5C5A] @endif flex items-center justify-center transition-all text-white leading-5">
+                    Resume Held Transactions
+                </button>
+                
+                    
                     <button
                         class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 6</button>
@@ -250,7 +266,7 @@
                  <div class="flex h-full w-full">
                        <x-button class="  pos-big-cancel  " spinner="cancelTransaction" wire:click="cancelTransaction"> Cancel </x-button>
                        <x-button class="  pos-big-cancel  " spinner="" wire:click="cancelTransaction"> Clear Chart </x-button>
-                        <x-button class=" pos-big-void" spinner="holdTransaction" wire:click="holdTransaction" >Hold Transaction</x-button>
+                        <x-button class=" pos-big-void" spinner="showTransactionModal" wire:click="showTransactionModal" >Hold </x-button>
                     </div>
                     <div class="flex-2  flex items-center justify-between w-full h-full ">
                         <p class="text-4xl text-gray-100 m-0 p-0  font-bold  flex-1"> Total</p>
@@ -269,6 +285,8 @@
     
    
 
+   @include('livewire.holdTransactionRecordModal')
+   @include('livewire.holdTransactionsModal')
    @include('livewire.checkItemModal')
    @include('livewire.addModal')
    @include('livewire.updateModal')

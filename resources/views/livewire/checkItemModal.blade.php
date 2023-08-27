@@ -2,7 +2,7 @@
     
     <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Search for a Product:</label>
-        <x-input wire:model="itemCheckerSearch" placeholder="Enter Product Name or ID"   autofocus />
+        <x-input icon="search" wire:model="itemCheckerSearch" placeholder="Enter Product Name or ID"   autofocus />
     </div>
 
     <div class="mt-4 ">
