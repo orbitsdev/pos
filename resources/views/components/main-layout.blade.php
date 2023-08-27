@@ -18,13 +18,16 @@
 
         <!-- Styles -->
         @livewireStyles
+        @livewireScripts
+        @stack('scripts')
     </head>
     <body class="font-sans antialiased">
        
         {{ $slot }}
      
         <x-dialog z-index="z-50" blur="md" align="center" />
-        @livewireScripts
+        @livewire('notifications')
+       
 
     </body>
 </html>

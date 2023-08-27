@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Filament\Navigation\NavigationItem;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Blade::directive('formattedNumber', function ($expression) {
+            return "<?php echo $expression !== null ? number_format($expression) : ''; ?>";
+        });
         Schema::defaultStringLength(191);
 
         Filament::serving(function () {
@@ -40,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
                    
                   
                    
+                        
                         NavigationGroup::make('System')->items([
                             
                             ...UserResource::getNavigationItems(),

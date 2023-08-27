@@ -1,6 +1,7 @@
 
 
 <div class="flex min-h-screen bg-gray-200">
+
     <main class="pos-container min-h-full w-full ">
         <section class="bg-[#1E2145] item1 flex items-center justify-between text-white ">
             <div class="text-center px-4  h-full text-white flex items-center justify-center font-bold">
@@ -69,48 +70,61 @@
                 <div class="w-full grid grid-cols-3 gap-1">
 
                     <button
-                        class="w-full py-3.5 px-1 bg-[#8F4788] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5  ">
-                        Calculator </button>
+                        wire:click="showAddItemForm"
+                        class="w-full py-3.5 px-1 bg-[#237357] flex   items-center justify-center transition-all hover:  text-white leading-5  ">
+                        Add Item </button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5  ">
-                        Feature 5 </button>
+                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
+                        Feature 4 </button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex  items-center justify-center transition-all hover:bg-white hover:text-gray-900  leading-5   ">
+                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex  items-center justify-center transition-all    leading-5   ">
                         Check Item </button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#8F4788] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5 ">
-                        Feature 4</button>
+                        wire:click="showItemCheckerModal"
+                        class="w-full py-3.5 px-1 bg-[#226DEA] flex   items-center justify-center transition-all   text-white leading-5 ">
+                        Check Product</button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5  ">
+                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 7</button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900  leading-5  ">
+                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex   items-center justify-center transition-all    leading-5  ">
                         Remove Item </button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#CF821D] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5 ">
-                        Feature 3</button>
+                        wire:click="clearBarCode"
+                        class="w-full py-3.5 px-1 bg-[#CF821D] flex   items-center justify-center transition-all   text-white leading-5 ">
+                        Clear Bar Code </button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5  ">
+                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 6</button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900  leading-5  ">
+                        class="w-full py-3.5 px-1 bg-[#237357] text-white flex   items-center justify-center transition-all    leading-5  ">
                         Feature 8 </button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#C71818] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5 ">
-                        Feature 9</button>
+                    wire:click="refreshWindow"
+                        class="w-full py-3.5 px-1 bg-[#C71818] flex   items-center justify-center transition-all   text-white leading-5 ">
+                        Refresh </button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5  ">
+                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 10</button>
                     <button
-                        class="w-full py-3.5 px-1 bg-[#237357]  flex   items-center justify-center transition-all hover:bg-white hover:text-gray-900 text-white leading-5  ">
+                        class="w-full py-3.5 px-1 bg-[#237357]  flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 11 </button>
                 </div>
               
                 <div class="w-full">
                  
                     <div class="w-full">
-                        <button
-                            class=" py-4 bg-[#237357] transition-all hover:bg-blue-500 text-white   w-full flex items-center justify-center text-center mt-6">
+                    @if(empty($transaction))
+                        <x-button
+                        spinner="startTransaction" wire:click="startTransaction"
+                            class="pos-main-button">
+                            
+
+                            Start Transaction </x-button>
+                    @else
+                        <x-button 
+                        spinner="confirmTransaction" wire:click="confirmTransaction"
+                            class="pos-main-button">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-6 h-6 mr-2 ">
                                 <path fill-rule="evenodd"
@@ -118,25 +132,51 @@
                                     clip-rule="evenodd" />
                             </svg>
 
-                            Confirm </button>
+                            Confirm Order </x-button>
+
+                            @endif
                     </div>
                 </div>
             </div>
         </section>
         <section class=" item3 p-6 ">
+           
+
+           
+            @if(!empty($transaction))
             <div class="flex flex-col justify-between items-center w-full">
                 <div class="w-full">
                     <div class="">
 
-                        <x-input icon="qrcode" placeholder="Bar Code " class="mb-6 self-center" wire:model="itemIdNumber" />
+                        <x-input icon="qrcode" placeholder="Bar Code " class="mb-6 self-center" wire:model.debounce.500ms="itemIdNumber" autofocus />
+                        {{-- <x-toggle wire:model="enableManual" /> --}}
+                   
                     </div>
-                    <div class="grid grid-cols-3">
-                        <div>
-                            {{-- <p class="text-lg">Chart</p> --}}
+                    <div class="mb-2">
+                        <p class="font-bold text-xl">
+                            Items ({{count($transaction->itemTransactions)}})
+
+                        </p>
+                        {{-- @if($this->item)
+                        <div class="flex items-center ">
+                            <p class="mr-2 uppercase">ID NUMBER</p>    
+                            <p class="uppercase">{{$this->item->id}}</p>
                         </div>
-                        <x-input icon="search" placeholder="Search " class="mb-6 self-center" />
-                        <div></div>
+                        <div class="flex items-center ">
+                            <p class="mr-2 uppercase">ITEM</p>    
+                            <p class="uppercase">{{$this->item->name}}</p>
+                        </div>
+                        <div class="flex items-center ">
+                            <p class="mr-2 uppercase">PRICE</p>    
+                            <p class="uppercase">{{$this->item->price}}</p>
+                        </div>
+                        @endif --}}
                     </div>
+                    {{-- <div class="flex items-center  justify-end mb-6">
+                        <x-input icon="search" placeholder="Search " class="self-center  min-w-[300px]  inline-block" />
+                        <x-button wire:click="showAddItemForm" spinner="showAddItemForm" icon="plus" positive label="Add Manually" class="ml-4 " />
+
+                    </div> --}}
                     
                 <div class="bg-[#E2E2E2] overflow-y-auto t-container">
 
@@ -144,25 +184,41 @@
                         <thead class="">
                             <tr class="shadow sticky top-0 bg-[#E2E2E2]">
 
-                                <th class="uppercase py-2  px-2 font-bold text-left leading-5">Item Description</th>
-                                <th class="uppercase py-2  px-2 font-bold text-left">Price</th>
-                                <th class="uppercase py-2  px-2 font-bold text-center">QTY</th>
-                                <th class="uppercase py-2  px-2 font-bold text-right">Discount</th>
-                                <th class="uppercase py-2  px-2 font-bold text-center">Subtotal</th>
-                                <th class="uppercase py-2  px-2 font-bold text-center"></th>
+                                <td class="uppercase py-2  px-2  text-left leading-5">Item Description</td>
+                                <td class="uppercase py-2  px-2  text-left">ID NUMBER</td>
+                                <td class="uppercase py-2  px-2  text-left">Price</td>
+                                <td class="uppercase py-2  px-2  text-center">QTY</td>
+                              
+                                <td class="uppercase py-2  px-2  text-center">Subtotal</td>
+                                <td class="uppercase py-2  px-2  text-center"></td>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-[#D5D5D7]">
-                            @forelse($items as $item)
-                                <tr class="even:bg-[#DBDADD] ">
-                                    <td class="capitalize text-sm px-2 text-left max-w-[200px]">{{optional($item)->name}}
+                            
+                            @forelse($transaction->itemTransactions as $item)
+                                <tr class="even:bg-[#DBDADD] @if ($loop->first)   @endif ">
+                                    <td class="capitalize text-sm  font-normal  px-2 text-left max-w-[200px]"> {{ optional($item->product)->name }}
                                     </td>
-                                    <td class="capitalize text-sm px-2 text-left">{{ optional($item)->price }}</td>
-                                    <td class="capitalize text-sm px-2 text-center">{{optional($item)->quantity}}</td>
-                                    <td class="capitalize text-sm px-2 text-right">123 </td>
-                                    <td class="capitalize text-sm px-2 text-center">1000 </td>
-                                    <td class="capitalize text-sm px-2 text-center">
+                                    <td class="capitalize text-sm  font-normal  px-2 text-left">{{optional($item->product)->id_number}}</td>
+                                    <td class="capitalize text-sm  font-normal  px-2 text-left">  @formattedNumber(optional($item->product)->price) </td>
+                                    <td class="capitalize text-sm  font-normal  px-2 text-center">{{optional($item)->quantity}}</td>
+                                  
+                                    <td class="capitalize text-sm  font-normal  px-2 text-center"> {{number_format($item->quantity * $item->product->price)}} </td>
+                                    <td class="capitalize text-sm  font-normal  px-2 text-center">
+                                        <div class="flex items-center">
+
+                                            <button
+                                            
+                                        wire:click="showUpdateForm({{ $item->id }})"
+                                            class="mr-2 flex items-center justify-center    p-0.5 hover:bg-gray-600 transition-all text-gray-400 hover:text-gray-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                              </svg>
+                                              
+                                        </button>
                                         <button
+                                        icon="edit"
+                                        wire:click="removeItem({{ $item->id }})"
                                             class="flex items-center justify-center  text-red-600  p-0.5 hover:bg-red-600 transition-all hover:text-white">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                 fill="currentColor" class="w-6 h-6  ">
@@ -171,6 +227,8 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                         </button>
+                                        {{-- <x-button right-icon="x"  wire:click="removeItem({{$item->id}})" class="pos-x-button" /> --}}
+                                    </div>
                                     </td>
                                 </tr>
                             @empty
@@ -187,41 +245,60 @@
 
             </div>
         </section>
-        <section class="item4 bg-gradient-to-r from-[#1E2145] to-[#252957] p-4">
-           <div class="flex items-center justify-end">
+        <section class="item4 bg-gradient-to-r from-[#1E2145] to-[#252957] flex items-end justify-between ">
 
-               <div class="text-[#AFBE5E]">
-                <p class="text-lg "> Total</p>
-                <p class="text-2xl font-bold"> ₱ 100,000,00</p>
+                 <div class="flex h-full w-full">
+                       <x-button class="  pos-big-cancel  " spinner="cancelTransaction" wire:click="cancelTransaction"> Cancel </x-button>
+                       <x-button class="  pos-big-cancel  " spinner="" wire:click="cancelTransaction"> Clear Chart </x-button>
+                        <x-button class=" pos-big-void" spinner="holdTransaction" wire:click="holdTransaction" >Hold Transaction</x-button>
+                    </div>
+                    <div class="flex-2  flex items-center justify-between w-full h-full ">
+                        <p class="text-4xl text-gray-100 m-0 p-0  font-bold  flex-1"> Total</p>
+                        <p class="text-4xl text-[#AFBE5E] m-0 p-0 font-bold flex-1">
+                            {{ number_format($transaction->itemTransactions->sum(function ($item) {
+                                return $item->quantity * $item->product->price;
+                            })) }}
+                        </p>
+                    </div>
                 
-            </div>
-        </div>
-            {{-- <div class=" w-full  ">
-                <div class="grid grid-cols-2">
-                    <div>
-                        <div class="text-white mb-1 grid grid-cols-2 ">
-                            <p>Subtotal</p>
-                            <p>12322</p>
-                        </div>
-                        <div class="text-white mb-1 grid grid-cols-2 ">
-                            <p>Subtotal</p>
-                            <p>12322</p>
-                        </div>
-                       
-                    </div>
-                    <div>
-                        <div class="text-white mb-1 grid grid-cols-2 ">
-                            <p>Subtotal</p>
-                            <p>12322</p>
-                        </div>
-                        <div class="text-white mb-1 grid grid-cols-2 ">
-                            <p>Subtotal</p>
-                            <p>12322</p>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
+            @else
+        
+            @endif
         </section>
     </main>
+    
+   
 
+   @include('livewire.checkItemModal')
+   @include('livewire.addModal')
+   @include('livewire.updateModal')
+
+    <script>
+
+document.addEventListener('livewire:load', function () {
+        Livewire.on('refreshWindow', function () {
+            window.location.reload();
+        });
+    });
+
+function validateNumber(input) {
+  // Remove any non-numeric characters
+  input.value = input.value.replace(/[^0-9]/g, '');
+}
+if (input.value === "" || parseInt(input.value) < 1) {
+    input.value = "1";
+  }
+  
+//   function preventBackspaceDelete(event, input) {
+//   // Check if there's only one digit left
+//   if (input.value.length === 1) {
+//     // Check if the pressed key is backspace or delete
+//     if (event.key === "Backspace" || event.key === "Delete"  || (event.ctrlKey && event.key === "x")) {
+//       event.preventDefault(); // Prevent the default action
+//     }
+//   }
+// }
+        
+     
+    </script>
 </div>

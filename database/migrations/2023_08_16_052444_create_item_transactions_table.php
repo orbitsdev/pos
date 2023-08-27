@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('transaction_id')->nullable();
             $table->foreignId('product_id')->nullable();
             $table->integer('quantity')->nullable();
-            $table->integer('integer')->nullable();
+            $table->integer('subtotal')->nullable();
             $table->timestamps();
         });
     }
