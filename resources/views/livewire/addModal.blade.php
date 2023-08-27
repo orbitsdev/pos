@@ -9,10 +9,14 @@
         @else
         <div class="mb-4 flex items-center justify-center transition-opacity duration-300">
             <button wire:click="clearSelectedItem" class="border border-blue-600 text-blue-600 hover:border-blue-800 hover:text-blue-800 px-3 py-1 rounded-lg flex items-center">
-                <svg class="h-4 w-4 mr-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                {{-- <svg class="h-4 w-4 mr-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Clear Item to Search Again
+                </svg> --}}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 mr-1 text-blue-600">
+                    <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                  </svg>
+                  
+                Deselect Item
             </button>
         </div>
         
@@ -99,6 +103,7 @@
                                 </div>
                             </div>
                         </div>
+                        @if(!empty($transaction))
                         @if($transaction->itemTransactions->contains('product_id', $selectedItem))
                         <div class="bg-blue-100 p-4 rounded-md flex items-start space-x-2">
                             <div>
@@ -121,7 +126,7 @@
                             <div></div>
                             @endif
 
-                        
+                        @endif
                         
 
                     </div>

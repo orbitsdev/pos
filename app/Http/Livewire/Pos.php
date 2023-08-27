@@ -17,10 +17,8 @@ class Pos extends Component
     use DialogTrait;
 
 
-    // scanning
+    // SCANNING
     public $itemIdNumber;
-
-    //
 
     public $selectedItem;
     public $selectedItemDetails;
@@ -31,30 +29,18 @@ class Pos extends Component
     public $enableManual = false;
 
 
-
-    public $showFormForUpdate = false;
-    public $selectedItemForUpdate;
-    public $itemQuantityForUpdate = 1;
-
-
-
-
-
-    // Item checker button
-
+    // CHECK PRODUCT BUTTON 
     public $itemCheckerModal = false;
     public $searchFoChartItem;
     public $itemCheckerSearch;
     public $productsResult = [];
 
 
-    // hold transaction
-
+    // HOLD TRANSACTION BUTTON 
     public $holdTransactionModal = false;
     public $transactionHoldTitle;
 
-    // hold tranaciton record modal
-
+    // RESUME HELD TRANSACTION BUTTON
     public $holdTransactionRecordModal = false;
     public $holdTransactionSearch;
     public $holdTransactionResult = [];
@@ -62,32 +48,33 @@ class Pos extends Component
     public $holdTransactionSelectedDetails;
 
 
+    // CHECK CART ITEM
+    public $cartItemModal =false;
+    public $cartItemSearch;
+    public $cartItems = [];
 
 
-    // global data
+    // GLOBAL DATA
     public $products = [];
 
-
-
-    //adding mannually BUTTON
+    //ADD ITEM BUTTON
     public $itemQuantity = 1;
     public $showAddForm = false;
     public $addSearch;
     public $addSearchResult = [];
-    
 
 
+    // UPDATE BUTTON LOCATED INSIDE CART TABLE
+    public $showFormForUpdate = false;
+    public $selectedItemForUpdate;
+    public $itemQuantityForUpdate = 1;
 
 
+    // POST CONFIRMATION BUTTON 
+   public $showOverViewModal = false;
+   
 
-    //for adding
-
-    public $itemBarCode;
-
-
-    // public $samples = [1, 2, 4, 51, 2, 4, 51, 2, 4, 51, 2, 4, 51, 2, 4, 51, 2, 4, 5];
-    public $samples = [];
-
+    // CONFIRM BUTTON FOR RESELECT TRANSACTION FROM HOLD 
     public function confirmSelectedHoldTransaction()
     {
 
@@ -126,7 +113,7 @@ class Pos extends Component
         if (!empty($this->transactionHoldTitle)) {
             $this->transaction->name = $this->transactionHoldTitle;
         } else {
-            $this->transaction->name = $this->transaction->created_at->format('Y-m-d l H:i a ');
+            $this->transaction->name = $this->transaction->created_at->format('Y-m-d l H:i A ');
         }
         $this->transaction->status = 'hold';
         $this->transaction->save();
@@ -136,22 +123,14 @@ class Pos extends Component
 
 
 
-    public function checkItem()
-    {
-        if (!empty($this->itemCheckerSearch)) {
-            dd('tes');
-        } else {
-            dd('no');
-        }
-    }
-
-
     public function clearSelectedItem()
     {
         $this->selectedItem = null;
         $this->selectedItemDetails = null;
     }
+    
 
+    // CONFIRMATION BUTTON OF UPDATE MODAL  
     public function updateItem()
     {
         $this->selectedItemForUpdate->quantity = (int)$this->itemQuantityForUpdate;
@@ -207,9 +186,7 @@ class Pos extends Component
             $this->showError(description: 'Item Not Found');
         }
     }
-    public function updatedItemQuantity()
-    {
-    }
+   
 
 
     public function clearBarCode()
@@ -219,20 +196,11 @@ class Pos extends Component
 
 
 
-   
-    public function getUpdatedTransaction()
-    {
-    }
-
-   
-    
-
-
-
-    
     public function confirmTransaction()
     {
-        dd('confirm transaction');
+        $this->transaction->status = 'completed';
+        $this->transaction->save();
+        $this->transaction = null;
     }
 
 
@@ -293,13 +261,13 @@ class Pos extends Component
 
 
 
-    
+
     public function refreshWindow()
     {
         $this->emit('refreshWindow');
     }
 
-   
+
 
 
     public function mount()
@@ -313,13 +281,15 @@ class Pos extends Component
 
 
         $this->loadProduct();
-       
         $this->loadTransactionChart();
+        $this->loadHoldTransactionResult();
+        $this->loadCartItem();
+      
 
 
         return view('livewire.pos', [
             'transaction' => $this->transaction,
-            'items' => $this->items,
+            'cartItems' =>$this->cartItems,
             'products' => $this->products,
             'addSearchResult' => $this->addSearchResult,
             'holdTransactionResult' => $this->holdTransactionResult,
@@ -338,7 +308,7 @@ class Pos extends Component
         ]);
     }
 
-   
+
 
     // BAR CODE READER LOGIC
     public function scanItem()
@@ -348,7 +318,7 @@ class Pos extends Component
             DB::beginTransaction();
 
             $this->item = Product::where('id_number',  $this->itemIdNumber)->first();
-            
+
             if (!empty($this->item)) {
                 $this->hasErrorMessage = null;
                 // check if the trsanctionItem Exist First
@@ -380,8 +350,9 @@ class Pos extends Component
     }
 
 
-    public function loadTransactionChart(){
-        if($this->transaction){
+    public function loadTransactionChart()
+    {
+        if ($this->transaction) {
             $this->transaction = Transaction::with('itemTransactions')->find($this->transaction->id);
         }
     }
@@ -392,8 +363,6 @@ class Pos extends Component
         $this->products = Product::when($this->addSearch, function ($query) {
             $query->where('id_number', $this->addSearch)->orWhere('name', 'like', '%' . $this->addSearch . '%');
         })->take(10)->get();
-
-       
     }
 
     public function loadProduct()
@@ -401,11 +370,23 @@ class Pos extends Component
         $this->products =  Product::when($this->addSearch, function ($query) {
             $query->where('id_number', $this->addSearch)->orWhere('name', 'like', '%' . $this->addSearch . '%');
         })
-        ->when($this->itemCheckerSearch, function ($query) {
-            $query->where('id_number', $this->itemCheckerSearch)->orWhere('name', 'like', '%' . $this->itemCheckerSearch . '%');
-        })->take(20)->get();
-        
+            ->when($this->itemCheckerSearch, function ($query) {
+                $query->where('id_number', $this->itemCheckerSearch)->orWhere('name', 'like', '%' . $this->itemCheckerSearch . '%');
+            })->take(20)->get();
     }
+
+    public function loadCartItem(){
+        
+        $this->cartItems = ItemTransaction::latest()->when($this->transaction, function($query){
+            $query->where('transaction_id', $this->transaction->id);
+        })->whereHas('transaction', function($query){
+            $query->where('status', 'active');
+        })->take(20)->get();
+
+    
+          
+    }
+
 
 
     public function getUnfinishTransaction()
@@ -414,14 +395,14 @@ class Pos extends Component
         $this->transaction = Transaction::latest()->where('user_id', auth()->user()->id)->where('status', 'active')->first();
 
         if (!empty($this->transaction)) {
-            $this->items = $this->transaction->itemTransactions;
+           $this->cartItems = $this->transaction->itemTransactions;
         }
     }
 
 
     public function loadHoldTransactionResult()
     {
-        $this->holdTransactionResult = Transaction::when($this->holdTransactionSearch,  function ($query) {
+        $this->holdTransactionResult = Transaction::latest()->when($this->holdTransactionSearch,  function ($query) {
             $query->where('name', 'like', '%' . $this->holdTransactionSearch . '%');
         })->whereHas('user', function ($query) {
             $query->where('id', auth()->user()->id);
@@ -438,15 +419,27 @@ class Pos extends Component
         $this->itemQuantity = 1;
     }
 
+    // CHECK CSRT ITEM BUTTON
+    public function showcartItemModal(){
+        // $this->loadCartItem();
 
+        $this->cartItemModal = true;
+    }
 
     // HELPERS
 
-    public function clearAddFormProperties(){
+    public function clearAddFormProperties()
+    {
         $this->itemQuantity = 1;
         $this->selectedItem = null;
         $this->selectedItemDetails = null;
         $this->addSearch = null;
+    }
+    public function clearUpdateFormProperties()
+    {
+        $this->itemQuantityForUpdate = 1;
+        $this->selectedItemForUpdate = null;
+    
     }
 
     // LIFE CYCLE LISTENERS
@@ -460,13 +453,29 @@ class Pos extends Component
         }
     }
 
-    public function updatedshowAddForm(){
-       
-        if(!$this->showAddForm){
+    public function updatedshowAddForm()
+    {
+
+        if (!$this->showAddForm) {
 
             $this->clearAddFormProperties();
+        }
+    }
+    public function updatedshowFormForUpdate()
+    {
 
+        if (!$this->showFormForUpdate) {
+
+            $this->clearUpdateFormProperties();
         }
     }
 
+    // CLEAR CAR BUTTON
+
+    public function clearCart()
+    {
+        if (!empty($this->transaction)) {
+            $this->transaction->itemTransactions()->delete();
+        }
+    }
 }

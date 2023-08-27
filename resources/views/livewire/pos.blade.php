@@ -79,13 +79,18 @@
                     @endif>
                     Add Item
                 </button>
-                
+                    
                     <button
-                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
-                        Feature 4 </button>
+                    @if(!$transaction)
+                    disabled
+                @else
+                    wire:click="showcartItemModal"
+                @endif
+                        class="w-full py-3.5 px-1 bg-[#373B69] flex  @if(!$transaction) cursor-not-allowed @endif  items-center justify-center transition-all   text-white leading-5  ">
+                        Check Cart Item  </button>
                     <button
                         class="w-full py-3.5 px-1 bg-[#237357] text-white flex  items-center justify-center transition-all    leading-5   ">
-                        Check Item </button>
+                        Check Product </button>
                     <button
                         wire:click="showItemCheckerModal"
                         class="w-full py-3.5 px-1 bg-[#226DEA] flex   items-center justify-center transition-all   text-white leading-5 ">
@@ -265,7 +270,7 @@
 
                  <div class="flex h-full w-full">
                        <x-button class="  pos-big-cancel  " spinner="cancelTransaction" wire:click="cancelTransaction"> Cancel </x-button>
-                       <x-button class="  pos-big-cancel  " spinner="" wire:click="cancelTransaction"> Clear Chart </x-button>
+                       <x-button class="  pos-big-cancel  " spinner="" wire:click="clearCart"> Clear Chart </x-button>
                         <x-button class=" pos-big-void" spinner="showTransactionModal" wire:click="showTransactionModal" >Hold </x-button>
                     </div>
                     <div class="flex-2  flex items-center justify-between w-full h-full ">
@@ -285,6 +290,7 @@
     
    
 
+   @include('livewire.cartItemModal')
    @include('livewire.holdTransactionRecordModal')
    @include('livewire.holdTransactionsModal')
    @include('livewire.checkItemModal')
