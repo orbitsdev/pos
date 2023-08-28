@@ -820,13 +820,34 @@
                 <p class="mr-4 col-span-4">Total </p>
                 <p></p>
                 <p></p>
-                <p> {{ number_format(
+                <p> ₱ {{ number_format(
                     $transaction->itemTransactions->sum(function ($item) {
                         return $item->quantity * $item->product->price;
                     }),
                 ) }}
                 </p>
             </div>
+            <div class="grid grid-cols-8">
+                <p class="mr-4 col-span-4">Amount </p>
+                <p></p>
+                <p></p>
+                <p>
+                    @if (!empty($amount_paid))
+                    ₱ {{ number_format($amount_paid) }}
+                    @endif
+                </p>
+                
+
+            </div>
+            
+           
+            
+        </section>
+       
+
+        <section class="border-t-2 border-dashed py-2 ">
+            <label class="block text-sm font-medium text-gray-700">Amount</label>
+            <x-input icon="cash" wire:model="amount_paid" placeholder="0" autofocus oninput="validateNumber(this)" onkeydown="preventBackspaceDelete(event, this)" />
         </section>
         @endif
     </div>
@@ -841,6 +862,51 @@
                     <x-button flat label="Cancel" x-on:click="close" />
                     <x-button blue icon="check" label="Finish Transaction" spinner="confirmTransaction"
                         wire:click="confirmTransaction" />
+                </div>
+            </div>
+        </x-slot>
+    </x-modal.card>
+
+    <x-modal.card  align="center" blur wire:model="showChangeDialog">
+
+        
+        <div class="bg-white p-6 shadow-md rounded-md">
+            <h2 class="text-2xl font-semibold text-center mb-4">Receipt</h2>
+            
+            <!-- Your item entries here -->
+        
+            @if(!empty($purchase_total))
+            <div class="flex items-center justify-between border-t pt-4 mt-4">
+                <span class="font-semibold text-gray-600">Total:</span>
+                <span class="text-green-600 text-lg">₱ {{ number_format($purchase_total) }}</span>
+            </div>
+            @endif
+        
+            @if(!empty($amount_paid))
+            <div class="flex items-center justify-between border-t pt-4 mt-4">
+                <span class="font-semibold text-gray-600">Customer Cash:</span>
+                <span class="text-green-600 text-lg">₱ {{ number_format($amount_paid) }}</span>
+            </div>
+            @endif
+        
+            @if(!empty($change))
+            <div class="flex items-center justify-between border-t pt-4 mt-4">
+                <span class="font-semibold text-gray-600">Customer Change:</span>
+                <span class="text-green-600 text-lg">₱ {{ number_format($change) }}</span>
+            </div>
+            @endif
+        </div>
+        
+
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+                
+
+                <div class="flex">
+                    {{-- <x-button blue label="OK" x-on:click="close" /> --}}
+                    <x-button blue label="DONE" spinner="closeChange"
+                        wire:click="closeChange" />
                 </div>
             </div>
         </x-slot>

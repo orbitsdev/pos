@@ -20,7 +20,10 @@ Route::get('/', function () {
 Route::get('/pos', function () {
     return view('pos');
 })->middleware(['auth']);
+
 Route::get('generate-pdf', [PDFController::class, 'generatePDF']);
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

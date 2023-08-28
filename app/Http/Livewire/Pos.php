@@ -75,7 +75,14 @@ class Pos extends Component
 
     // POST CONFIRMATION BUTTON 
    public $overViewModal = false;
-   public $amountPaid;
+   public $amount_paid;
+   public $purchase_total=0;
+   public $change=0;
+
+   // CHANGE DIALOG
+
+   public $showChangeDialog = false;
+   
    
 
     // CONFIRM BUTTON FOR RESELECT TRANSACTION FROM HOLD 
@@ -232,18 +239,48 @@ class Pos extends Component
     public function confirmTransaction()
     {
 
-        $total = $this->transaction->itemTransactions->sum(function($item){
-            return $item->quantity * $item->product->price;
-        });
 
-        $this->transaction->total_amount = $total;
-        $this->transaction->status = 'completed';
-        $this->transaction->save();
-        $this->overViewModal =false;
-        $this->transaction = null;
-        // usleep(300000); // Sleep for 300,000 microseconds (300 milliseconds)
+        if (!$this->transaction->itemTransactions->isEmpty()) {
+      
+            $total = $this->transaction->itemTransactions->sum(function($item){
+                return $item->quantity * $item->product->price;
+            });
 
-        $this->showSuccess(title: 'Transaction Completed', description: 'Transaction has been completed successfully');
+
+            if($this->amount_paid < $total || empty($this->amount_paid)){
+
+                $this->showError(title: 'Insufficient Amount', description: 'Please provide sufficient amount to proceed.');
+                return;
+            }   
+
+
+            $this->purchase_total = $total;
+            $this->change = $this->amount_paid - $total;
+
+
+
+            $this->transaction->total_amount = $total;
+            $this->transaction->status = 'completed';
+            $this->transaction->total_amount = $total;
+            $this->transaction->amount_paid = $this->amount_paid;
+            $this->transaction->change = $this->change;
+            $this->transaction->save();
+            $this->overViewModal =false;
+            $this->transaction = null;    
+            $this->showChangeDialog = true;
+            // $this->showSuccess(title: 'Transaction Completed', description: 'Transaction has been completed successfully');
+       
+        } else {
+            $this->showWarning(title: 'Operation failed', description: 'No Item in the cart please add item to proceed. ');
+        }
+
+    }
+
+    public function closeChange(){
+        $this->showChangeDialog = false;
+        $this->purchase_total = 0;
+        $this->amount_paid;
+        $this->change = 0;
     }
 
 
@@ -347,6 +384,7 @@ class Pos extends Component
             'products' => $this->products,
             'addSearchResult' => $this->addSearchResult,
             'holdTransactionResult' => $this->holdTransactionResult,
+            'amount_paid'=> $this->amount_paid,
         ]);
     }
 

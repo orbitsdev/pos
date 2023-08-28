@@ -30,6 +30,8 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-list';
     protected static ?string $activeNavigationIcon = 'heroicon-s-clipboard-list';
+    protected static ?string $navigationGroup = 'Service';
+    protected static ?int $navigationSort = 3;
 
     public $image;
 
