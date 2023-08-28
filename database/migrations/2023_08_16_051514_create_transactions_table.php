@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->integer('total_amount')->nullable();
+            $table->integer('amount_paid')->nullable(); // New column for amount paid
+            $table->integer('change')->nullable(); 
             $table->string('status')->nullable();
             $table->timestamps();
         });

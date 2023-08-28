@@ -25,9 +25,8 @@
        
         {{ $slot }}
      
-        @livewire('notifications')
         <x-dialog z-index="z-50" blur="md" align="center" />
+        @livewire('notifications')
        
-
     </body>
 </html>

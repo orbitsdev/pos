@@ -75,6 +75,7 @@ class Pos extends Component
 
     // POST CONFIRMATION BUTTON 
    public $overViewModal = false;
+   public $amountPaid;
    
 
     // CONFIRM BUTTON FOR RESELECT TRANSACTION FROM HOLD 
@@ -107,6 +108,8 @@ class Pos extends Component
 
     public function showTransactionModal()
     {
+
+      
         $this->holdTransactionModal = true;
     }
 
@@ -242,7 +245,9 @@ class Pos extends Component
 
     public function showAddItemForm()
     {
+       
         $this->showAddForm = true;
+        
     }
 
     public function confirmAddItem()
