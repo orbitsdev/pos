@@ -153,7 +153,7 @@
                                     clip-rule="evenodd" />
                             </svg>
 
-                            Confirm Order </x-button>
+                            Print Reciept  </x-button>
 
                             @endif
                     </div>
@@ -290,6 +290,7 @@
     
    
 
+   @include('livewire.cartOverviewDetailsBeforePrintModal')
    @include('livewire.cartItemModal')
    @include('livewire.holdTransactionRecordModal')
    @include('livewire.holdTransactionsModal')

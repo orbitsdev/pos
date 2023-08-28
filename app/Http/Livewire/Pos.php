@@ -18,6 +18,9 @@ class Pos extends Component
 
 
     // SCANNING
+
+
+    public $samples = [1,2,3,4,5,12,3123,123,123,12,312,32,23,123,12,312,32];
     public $itemIdNumber;
 
     public $selectedItem;
@@ -71,7 +74,7 @@ class Pos extends Component
 
 
     // POST CONFIRMATION BUTTON 
-   public $showOverViewModal = false;
+   public $overViewModal = true;
    
 
     // CONFIRM BUTTON FOR RESELECT TRANSACTION FROM HOLD 
@@ -106,6 +109,8 @@ class Pos extends Component
     {
         $this->holdTransactionModal = true;
     }
+
+
     public function holdTransaction()
     {
 
@@ -196,11 +201,22 @@ class Pos extends Component
 
 
 
+    public function showOverViewModal()
+    {
+        $this->overViewModal = true;
+        // $this->transaction->status = 'completed';
+        // $this->transaction->save();
+        // $this->transaction = null;
+    }
+
     public function confirmTransaction()
     {
-        $this->transaction->status = 'completed';
-        $this->transaction->save();
-        $this->transaction = null;
+
+        $total = $this->transaction->itemTransactions->sum(function($item){
+            return $item->quantity * $item->product->price;
+        });
+        dd($total);
+
     }
 
 
