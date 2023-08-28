@@ -56,8 +56,11 @@
 .pos-big-cancel{
     @apply  text-lg border-none  outline-none active:border-none    py-3.5 px-1 bg-[#C71818] hover:bg-[#c71818de]  flex  mr-1 items-center justify-center transition-all   text-white leading-5 w-[200px] !important ; 
 }
+.pos-big-clear-cart{
+    @apply  text-lg border-none  outline-none active:border-none    py-3.5 px-1 bg-[#8F4788] hover:bg-[#7a2f73]  flex  mr-1 items-center justify-center transition-all   text-white leading-5 w-[200px] !important ; 
+}
 .pos-big-void{
-    @apply  text-lg border-none outline-none active:border-none    py-3.5 px-1 bg-[#CF821D] hover:bg-[#cf821dd3]   flex   items-center justify-center transition-all   text-white leading-5 w-[200px] !important ; 
+    @apply  text-lg border-none outline-none active:border-none    py-3.5 px-1 bg-[#D05E1E] hover:bg-[#a34814]   flex   items-center justify-center transition-all   text-white leading-5 w-[200px] !important ; 
 }
 
 /* 

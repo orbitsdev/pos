@@ -81,18 +81,21 @@ class Pos extends Component
     // CONFIRM BUTTON FOR RESELECT TRANSACTION FROM HOLD 
     public function confirmSelectedHoldTransaction()
     {
-
+       
         $this->transaction = Transaction::find($this->holdTransactionSelected);
         $this->transaction->status = 'active';
         $this->transaction->save();
-        $this->holdTransactionRecordModal = false;
+        $this->transaction = Transaction::find($this->holdTransactionSelected);
         $this->clearSelectedTransaction();
+        $this->holdTransactionRecordModal = false;
     }
 
     public function clearSelectedTransaction()
-    {
+    {   
         $this->holdTransactionSelected = null;
         $this->holdTransactionSelectedDetails = null;
+     
+        // $this->transaction= null;
     }
 
     public function updatedholdTransactionSelected()
@@ -101,16 +104,28 @@ class Pos extends Component
     }
 
     public function showTransactionRecordModal()
-    {
+    {   
 
-        $this->holdTransactionRecordModal = true;
+        if(empty($this->transaction)){
+
+            $this->holdTransactionRecordModal = true;
+        }else{
+            $this->showWarning(title: 'Unfinished Transaction', description: 'Please complete the current transaction to proceed.');
+
+        }
+
     }
 
     public function showTransactionModal()
     {
 
+        if(!empty($this->transaction)){
+
+            $this->holdTransactionModal = true;
+        }else{
+            $this->showError(title: 'No Active Transaction Found', description: 'Please initiate a new sale transaction to proceed.');
+        }
       
-        $this->holdTransactionModal = true;
     }
 
 
@@ -121,12 +136,12 @@ class Pos extends Component
         if (!empty($this->transactionHoldTitle)) {
             $this->transaction->name = $this->transactionHoldTitle;
         } else {
-            $this->transaction->name = $this->transaction->created_at->format('Y-m-d l H:i A ');
+            $this->transaction->name = $this->transaction->created_at->timezone('Asia/Manila')->format('Y-m-d l h:i a');
         }
         $this->transaction->status = 'hold';
         $this->transaction->save();
-        $this->transaction = null;
         $this->holdTransactionModal = false;
+        $this->transaction = null;
     }
 
 
@@ -210,6 +225,8 @@ class Pos extends Component
         // $this->transaction->status = 'completed';
         // $this->transaction->save();
         // $this->transaction = null;
+        // $this->showSuccess(title: 'Transaction Completed', description: 'Transaction has been completed successfully');
+
     }
 
     public function confirmTransaction()
@@ -222,31 +239,41 @@ class Pos extends Component
         $this->transaction->total_amount = $total;
         $this->transaction->status = 'completed';
         $this->transaction->save();
-        $this->transaction = null;
         $this->overViewModal =false;
-        // $this->showSuccess(description: 'Transaction Completed');
+        $this->transaction = null;
+        // usleep(300000); // Sleep for 300,000 microseconds (300 milliseconds)
 
+        $this->showSuccess(title: 'Transaction Completed', description: 'Transaction has been completed successfully');
     }
 
 
     public function cancelTransaction()
     {
+        if(!empty($this->transaction)){
 
-        $this->transaction->delete();
-        $this->transaction = null;
+            $this->transaction->delete();
+            $this->transaction = null;
+        }else{
+            $this->showError(title: 'No Active Transaction Found', description: 'Please initiate a new sale transaction to proceed.');
+        }
     }
 
 
     public function removeItem($item)
     {
 
-        ItemTransaction::where('transaction_id', $this->transaction->id)->where('id', $item)->delete();
+        ItemTransaction::where('id', $item)->delete();
     }
 
     public function showAddItemForm()
-    {
-       
-        $this->showAddForm = true;
+    {   
+        if(!empty($this->transaction)){
+        
+            $this->showAddForm = true;
+        }else{
+            $this->showWarning(title: 'No Active Transaction Found', description: 'Please initiate a new sale transaction to add item');
+
+        }
         
     }
 
@@ -448,9 +475,13 @@ class Pos extends Component
 
     // CHECK CSRT ITEM BUTTON
     public function showcartItemModal(){
-        // $this->loadCartItem();
+        if(!empty($this->transaction)){
+            $this->cartItemModal = true;
 
-        $this->cartItemModal = true;
+        }else{
+            $this->showError(title: 'No Active Transaction Found', description: 'Please initiate a new sale transaction to proceed.');
+
+        }
     }
 
     // HELPERS
@@ -502,7 +533,18 @@ class Pos extends Component
     public function clearCart()
     {
         if (!empty($this->transaction)) {
-            $this->transaction->itemTransactions()->delete();
+
+            if(count($this->transaction->itemTransactions)>0) {
+
+                $this->transaction->itemTransactions()->delete();
+            }else{
+
+                $this->showWarning(title: 'Warning', description: 'Cart is Empty');
+
+            }
+        }else{
+            $this->showError(title: 'Error', description: 'No Active Transaction Found');
         }
+
     }
 }

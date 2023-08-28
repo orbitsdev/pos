@@ -10,7 +10,7 @@
             </div>
             <div class="flex-1 flex items-center justify-center ">
 
-                <a href="#"
+                <a href="/admin"
                     class="flex items-center flex-col justify-center px-6 transition-all hover:bg-orange-400 rounded py-1 text-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mb-1">
                         <path fill-rule="evenodd"
@@ -52,10 +52,14 @@
                     </svg>
 
                     Help</a>
-                <a href="#"
+                    <form method="POST" action="{{ route('logout') }}" x-data>
+                        @csrf
+                <button href="{{ route('logout') }}"
+                @click.prevent="$root.submit();"
                     class="flex items-center flex-col justify-center px-6 transition-all hover:bg-orange-400 rounded py-1 text-sm">
                     <i class="fa-solid fa-right-from-bracket mb-1 text-lg "></i>
-                    Logout</a>
+                    Logout</button>
+                    </form>
             </div>
             <div class="text-center px-4">
                 <p class="text-sm">{{ now()->format('d, M Y ') }}</p>
@@ -67,27 +71,27 @@
             <div class="flex items-center justify-between h-full flex-col w-full">
                 <div class="w-full grid grid-cols-3 gap-1">
 
-                    <button
-                        @if (!$transaction) disabled
-                        class="w-full py-3.5 px-1 cursor-not-allowed bg-[#237357] flex items-center justify-center transition-all hover:bg-[#1A4F41] text-white leading-5"
-                    @else
+                    <x-button
                         wire:click="showAddItemForm"
-                        class="w-full py-3.5 px-1 bg-[#237357] flex items-center justify-center transition-all hover:bg-[#1A4F41] text-white leading-5" @endif>
+                        spinner="showAddItemForm"
+                        class="w-full py-3.5 px-1 bg-[#237357] flex items-center justify-center transition-all hover:bg-[#1A4F41] text-white leading-5" >
                         Add Item
-                    </button>
+                    </x-button>
+                  
 
-                    <button
-                        @if (!$transaction) disabled
-                @else
-                    wire:click="showcartItemModal" @endif
-                        class="w-full py-3.5 px-1 bg-[#373B69] flex  @if (!$transaction) cursor-not-allowed @endif  items-center justify-center transition-all   text-white leading-5  ">
-                        Check Cart Item </button>
+                    <x-button
+                     
+                    wire:click="showcartItemModal" 
+                        class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
+                        Check Cart Item </x-button>
                     <button
                         class="w-full py-3.5 px-1 bg-[#237357] text-white flex  items-center justify-center transition-all    leading-5   ">
                         Check Product </button>
-                    <button wire:click="showItemCheckerModal"
+                    <x-button 
+                    spinner="showItemCheckerModal"
+                    wire:click="showItemCheckerModal"
                         class="w-full py-3.5 px-1 bg-[#226DEA] flex   items-center justify-center transition-all   text-white leading-5 ">
-                        Check Product</button>
+                        Check Product</x-button>
                     <button
                         class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 7</button>
@@ -95,14 +99,18 @@
                         class="w-full py-3.5 px-1 bg-[#237357] text-white flex items-center justify-center transition-all leading-5">
                         Remove Item
                     </button>
+                    
+                  
+                    <x-button
+                    wire:click="showTransactionRecordModal"
+                    spinner="showTransactionRecordModal"
+                     class="w-full py-3.5 px-1 bg-[#BD7574]  flex items-center justify-center transition-all text-white leading-5">
 
-                    <button
-                        @if ($transaction) disabled
-                    @else
-                        wire:click="showTransactionRecordModal" @endif
-                        class="w-full py-3.5 px-1 bg-[#BD7574] @if ($transaction) cursor-not-allowed hover:bg-[#9A5C5A] @endif flex items-center justify-center transition-all text-white leading-5">
                         Resume Held Transactions
-                    </button>
+                    </x-button>
+                  
+                 
+                    
 
 
                     <button
@@ -111,9 +119,9 @@
                     <button
                         class="w-full py-3.5 px-1 bg-[#237357] text-white flex   items-center justify-center transition-all    leading-5  ">
                         Feature 8 </button>
-                    <button wire:click="refreshWindow"
+                    <x-button wire:click="refreshWindow"
                         class="w-full py-3.5 px-1 bg-[#C71818] flex   items-center justify-center transition-all   text-white leading-5 ">
-                        Refresh </button>
+                        Reload </x-button>
                     <button
                         class="w-full py-3.5 px-1 bg-[#373B69] flex   items-center justify-center transition-all   text-white leading-5  ">
                         Feature 10</button>
@@ -126,10 +134,14 @@
 
                     <div class="w-full">
                         @if (empty($transaction))
-                            <x-button spinner="startTransaction" wire:click="startTransaction" class="pos-main-button">
-
-
-                                Start Transaction </x-button>
+                        <x-button spinner="startTransaction" wire:click="startTransaction" class="pos-main-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                              </svg>
+                              
+                            New Sale
+                        </x-button>
+                        
                         @else
                             <x-button spinner="showOverViewModal" wire:click="showOverViewModal"
                                 class="pos-main-button">
@@ -246,9 +258,9 @@
         <section class="item4 bg-gradient-to-r from-[#1E2145] to-[#252957] flex items-end justify-between ">
 
             <div class="flex h-full w-full">
-                <x-button class="  pos-big-cancel  " spinner="cancelTransaction" wire:click="cancelTransaction">
+                <x-button class="  pos-big-cancel " spinner="cancelTransaction" wire:click="cancelTransaction">
                     Cancel </x-button>
-                <x-button class="  pos-big-cancel  " spinner="" wire:click="clearCart"> Clear Chart </x-button>
+                <x-button class="pos-big-clear-cart " spinner="" wire:click="clearCart"> Clear Chart </x-button>
                 <x-button class=" pos-big-void" spinner="showTransactionModal" wire:click="showTransactionModal">Hold
                 </x-button>
             </div>
@@ -467,7 +479,7 @@
      
 
 
-    <x-modal.card max-width="6xl" title="Search Product" align="center" blur wire:model="itemCheckerModal">
+    <x-modal.card max-width="6xl" title="Item Checker" align="center" blur wire:model="itemCheckerModal">
 
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Search for a Product:</label>
@@ -752,14 +764,96 @@
         </x-slot>
     </x-modal.card>
 
-{{-- 
-    
+    <x-modal.card  align="center" blur wire:model="overViewModal">
+        <div class="text-sm">
 
+        @if($transaction)
+
+        <section class="">
+            <p class="flex items-center justify-center font-bold ">{{ env('APP_NAME') }} RECEIPT</p>
+            <div class="grid grid-cols-2   py-2">
+
+                <div class="flex items-center   w-full ">
+
+                    <p class="mr-4 ">Reciept: </p>
+                    <p> {{ $this->transaction->id }}</p>
+                </div>
+                <div class="flex items-center  w-full ">
+
+                    <p class="mr-4">Date:</p>
+                    <p>{{ $this->transaction->updated_at->format('d/m/y h:i A') }}</p>
+                </div>
+
+                <div class="flex items-center  w-full ">
+                    <p class="mr-4">Cashier: </p>
+                    <p>{{ $transaction->user->name }} </p>
+                </div>
+                <div class="flex items-center  w-full ">
+
+                </div>
+            </div>
+
+        </section>
+
+        @endif
+            @if($transaction)
+        <section class="border-t-2 border-dashed py-2  ">
+            <div class="grid grid-cols-8 mb-1">
+                <div class="col-span-4">Item</div>
+                <div>QTY</div>
+                <div>Price</div>
+                <div>Subtotal</div>
+            </div>
+            @forelse($transaction->itemTransactions as $item)
+                <div class="grid grid-cols-8 mb-1">
+                    <div class="leading-4 uppercase col-span-4">{{ $item->product->name }}</div>
+                    <div>{{ $item->quantity }}</div>
+                    <div>{{ $item->product->price }}</div>
+                    <div> {{ number_format($item->quantity * $item->product->price) }} </div>
+                </div>
+            @empty
+            @endforelse
+        </section>
+
+        <section class="border-t-2 border-dashed py-2  ">
+            <div class="grid grid-cols-8">
+                <p class="mr-4 col-span-4">Total </p>
+                <p></p>
+                <p></p>
+                <p> {{ number_format(
+                    $transaction->itemTransactions->sum(function ($item) {
+                        return $item->quantity * $item->product->price;
+                    }),
+                ) }}
+                </p>
+            </div>
+        </section>
+        @endif
+    </div>
+
+
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+                
+
+                <div class="flex">
+                    <x-button flat label="Cancel" x-on:click="close" />
+                    <x-button blue icon="check" label="Finish Transaction" spinner="confirmTransaction"
+                        wire:click="confirmTransaction" />
+                </div>
+            </div>
+        </x-slot>
+    </x-modal.card>
+
+
+    
+{{-- 
 
     <x-modal.card max-width="2xl" spacing="p-2" align="center" blur wire:model="overViewModal">
 
-       
-            <main class="text-sm">
+           
+            <div class="text-sm">  
 
                 <section class="">
                     <p class="flex items-center justify-center font-bold ">{{ env('APP_NAME') }} RECEIPT</p>
@@ -817,8 +911,8 @@
                     </div>
                 </section>
 
-            </main>
-
+            </div>
+           
       
 
 
@@ -843,13 +937,13 @@
             });
         });
 
-        // function validateNumber(input) {
-        //     // Remove any non-numeric characters
-        //     input.value = input.value.replace(/[^0-9]/g, '');
-        // }
-        // if (input.value === "" || parseInt(input.value) < 1) {
-        //     input.value = "1";
-        // }
+        function validateNumber(input) {
+            // Remove any non-numeric characters
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+        if (input.value === "" || parseInt(input.value) < 1) {
+            input.value = "1";
+        }
 
         //   function preventBackspaceDelete(event, input) {
         //   // Check if there's only one digit left

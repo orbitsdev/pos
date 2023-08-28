@@ -27,4 +27,26 @@ trait DialogTrait{
 
         );
     }
+    public function showInfo ($title='Operation Completed', $description='Your request has been processed successfully'){
+
+
+        $this->dialog()->info(
+
+            $title = $title,
+
+            $description = $description,
+
+        );
+    }
+    public function showWarning ($title='Operation Completed', $description='Your request has been processed successfully'){
+
+
+        $this->dialog()->warning(
+
+            $title = $title,
+
+            $description = $description,
+
+        );
+    }
 }
