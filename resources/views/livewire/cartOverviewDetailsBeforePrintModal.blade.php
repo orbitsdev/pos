@@ -67,7 +67,7 @@
  
             <div class="flex">
                 <x-button flat label="Cancel" x-on:click="close" />
-                <x-button blue icon="printer" label="Print" wire:click="confirmTransaction" />
+                <x-button blue icon="check" label="Finish Transaction" spinner="confirmTransaction" wire:click="confirmTransaction" />
             </div>
         </div>
     </x-slot>

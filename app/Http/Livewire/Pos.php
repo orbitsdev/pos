@@ -74,7 +74,7 @@ class Pos extends Component
 
 
     // POST CONFIRMATION BUTTON 
-   public $overViewModal = true;
+   public $overViewModal = false;
    
 
     // CONFIRM BUTTON FOR RESELECT TRANSACTION FROM HOLD 
@@ -215,7 +215,13 @@ class Pos extends Component
         $total = $this->transaction->itemTransactions->sum(function($item){
             return $item->quantity * $item->product->price;
         });
-        dd($total);
+
+        $this->transaction->total_amount = $total;
+        $this->transaction->status = 'completed';
+        $this->transaction->save();
+        $this->transaction = null;
+        $this->overViewModal =false;
+        // $this->showSuccess(description: 'Transaction Completed');
 
     }
 
