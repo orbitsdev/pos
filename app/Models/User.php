@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Role;
 use App\Models\Transaction;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -80,5 +81,9 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasOne(Transaction::class);
     }
 
+
+    public function role(){
+        return $this->belongsTo(Role::class);
+    }
     
 }

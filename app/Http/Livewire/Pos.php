@@ -256,9 +256,6 @@ class Pos extends Component
 
             $this->purchase_total = $total;
             $this->change = $this->amount_paid - $total;
-
-
-
             $this->transaction->total_amount = $total;
             $this->transaction->status = 'completed';
             $this->transaction->total_amount = $total;
@@ -268,6 +265,7 @@ class Pos extends Component
             $this->overViewModal =false;
             $this->transaction = null;    
             $this->showChangeDialog = true;
+            
             // $this->showSuccess(title: 'Transaction Completed', description: 'Transaction has been completed successfully');
        
         } else {
