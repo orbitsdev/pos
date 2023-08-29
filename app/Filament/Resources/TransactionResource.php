@@ -54,6 +54,7 @@ class TransactionResource extends Resource
                 TextColumn::make('change')->searchable(),
                 BadgeColumn::make('status')->searchable()->color(static function ($state): string {
                     return  match ($state) {
+                        'active' => 'primary',
                         'hold' => 'warning',
                         'voided' => 'danger',
                         'completed' => 'success',
@@ -70,6 +71,7 @@ class TransactionResource extends Resource
                 SelectFilter::make('status')
                     ->multiple()
                     ->options([
+                        'active' => 'Active',
                         'hold' => 'Hold',
                         'voided' => 'Voided',
                         'completed' => 'Completed',
