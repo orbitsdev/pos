@@ -3,13 +3,17 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
+use App\Models\User;
 use Filament\Tables;
 use App\Models\Transaction;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Card;
 use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,16 +30,52 @@ class TransactionResource extends Resource
     protected static ?string $navigationGroup = 'Service';
     protected static ?int $navigationSort = 4;
 
-    
+    // protected static ?string $modelLabel = 'cliente';
+
+
     public static function getEloquentQuery(): Builder
-{
-    return parent::getEloquentQuery()->latest();
-}
+    {
+        return parent::getEloquentQuery()->latest();
+    }
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Card::make()->schema([
+                    TextInput::make('name')->required()->columnSpan(2),
+                    Select::make('user_id')
+                        ->label('User')
+                        ->options(User::whereHas('role', function ($query) {
+                            $query->whereName('cashier');
+                        })->get()->pluck('name', 'id')->map(function ($name) {
+                            return ucfirst($name);
+                        }))
+                        ->searchable()
+                        ->columnSpan(3),
+
+                    TextInput::make('total_amount')
+                        ->numeric()
+                        ->mask(fn (TextInput\Mask $mask) => $mask->numeric())
+                        ->required()
+                        ->columnSpan(2),
+                    TextInput::make('amount_paid')
+                        ->numeric()
+                        ->mask(fn (TextInput\Mask $mask) => $mask->numeric())
+                        ->required()
+                        ->columnSpan(2),
+                    TextInput::make('change')
+                        ->numeric()
+                        ->mask(fn (TextInput\Mask $mask) => $mask->numeric())
+                        ->required()
+                        ->columnSpan(2),
+                    Select::make('status')->options([
+                        'active' => 'Active',
+                        'hold' => 'Hold',
+                        'voided' => 'Voided',
+                        'completed' => 'Completed',
+                        'canceled' => 'Canceled',
+                    ])->required()->columnSpan(2),
+                ]),
             ]);
     }
 
@@ -94,7 +134,7 @@ class TransactionResource extends Resource
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
-                
+
             ])
             ->actions([
                 // Tables\Actions\ActionGroup::make([]),

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ReportResource\Pages;
-use App\Filament\Resources\ReportResource\RelationManagers;
-use App\Models\Report;
+use App\Filament\Resources\SaleResource\Pages;
+use App\Filament\Resources\SaleResource\RelationManagers;
+use App\Models\Sale;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -13,17 +13,16 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ReportResource extends Resource
+class SaleResource extends Resource
 {
-    protected static ?string $model = Report::class;
+    protected static ?string $model = Sale::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-report';
-    protected static ?string $activeNavigationIcon = 'heroicon-o-document-report';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+
+    protected static ?string $activeNavigationIcon = 'heroicon-s-chart-bar';
 
     protected static ?string $navigationGroup = 'Reports';
     protected static ?int $navigationSort = 5;
-    protected static bool $shouldRegisterNavigation = false;
-    
     public static function form(Form $form): Form
     {
         return $form
@@ -59,9 +58,9 @@ class ReportResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\TransactionReport::route('/'),
-            // 'create' => Pages\CreateReport::route('/create'),
-            // 'edit' => Pages\EditReport::route('/{record}/edit'),
+            'index' => Pages\Sales::route('/'),
+            // 'create' => Pages\CreateSale::route('/create'),
+            // 'edit' => Pages\EditSale::route('/{record}/edit'),
         ];
     }    
 }

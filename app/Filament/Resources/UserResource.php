@@ -12,6 +12,7 @@ use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
@@ -103,7 +104,7 @@ class UserResource extends Resource
                 })
                 ->label('Role')
                 ->searchable(),
-                
+
                 TextColumn::make('created_at')->date('M-d-Y H:i A'),
 
             ])
@@ -116,8 +117,13 @@ class UserResource extends Resource
                 ->searchable(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->button()->outlined()->label('Update'),
-                Tables\Actions\DeleteAction::make()->button()->outlined()
+                Tables\Actions\EditAction::make()->button()->outlined()->label('Update')->hidden(function($record){
+                    return $record->id == Auth::user()->id;
+                }),
+                Tables\Actions\DeleteAction::make()->button()->outlined()->hidden(function($record){
+                    return $record->id == Auth::user()->id;
+                }),
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
